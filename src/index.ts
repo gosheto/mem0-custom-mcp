@@ -88,7 +88,7 @@ const GetMemorySchema = z.object({
 
 const UpdateMemorySchema = z.object({
   memory_id: z.string().describe("ID of the memory to update"),
-  data: z.string().describe("New text content for the memory"),
+  text: z.string().describe("New text content for the memory"),
 });
 
 const GetMemoryHistorySchema = z.object({
@@ -220,8 +220,17 @@ function createMcpServer(): McpServer {
       inputSchema: GetMemoriesSchema,
     },
     async ({ user_id, agent_id, run_id }) => {
-      const userId = agent_id ?? run_id ?? user_id ?? DEFAULT_USER_ID;
-      const result = await callMem0API(`/memories/${userId}`);
+      const params: Record<string,string> = {};
+      if (agent_id) params.agent_id = agent_id;
+      else if (run_id) params.run_id = run_id;
+      else params.user_id = user_id ?? DEFAULT_USER_ID;
+      
+      const result = await callMem0API(
+        "/memories",
+        "GET",
+        undefined,
+        params
+      );
       return { content: [{ type: "text" as const, text: `Memories:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -254,7 +263,11 @@ function createMcpServer(): McpServer {
       if (filters) body.filters = filters;
       if (limit) body.limit = limit;
 
-      const result = await callMem0API("/memories/search/", "POST", body);
+      const result = await callMem0API(
+                    "/search",
+                    "POST",
+                    body
+                  );
       return { content: [{ type: "text" as const, text: `Search results:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
