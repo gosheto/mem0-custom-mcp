@@ -135,7 +135,7 @@ async function callMem0API(
 
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (MEM0_BEARER_TOKEN) {
-    headers["Authorization"] = `Bearer ${MEM0_BEARER_TOKEN}`;
+    headers["X-API-Key"] = ${MEM0_BEARER_TOKEN};
   }
 
   const options: RequestInit = { method, headers };
