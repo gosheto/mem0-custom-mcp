@@ -207,7 +207,7 @@ function createMcpServer(): McpServer {
       else body.user_id = user_id ?? DEFAULT_USER_ID;
       if (metadata) body.metadata = metadata;
 
-      const result = await callMem0API("/v1/memories/", "POST", body);
+      const result = await callMem0API("/memories/", "POST", body);
       return { content: [{ type: "text" as const, text: `Memory added:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -221,7 +221,7 @@ function createMcpServer(): McpServer {
     },
     async ({ user_id, agent_id, run_id }) => {
       const userId = agent_id ?? run_id ?? user_id ?? DEFAULT_USER_ID;
-      const result = await callMem0API(`/v1/memories/${userId}`);
+      const result = await callMem0API(`/memories/${userId}`);
       return { content: [{ type: "text" as const, text: `Memories:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -234,7 +234,7 @@ function createMcpServer(): McpServer {
       inputSchema: GetMemorySchema,
     },
     async ({ memory_id }) => {
-      const result = await callMem0API(`/v1/memories/${memory_id}`);
+      const result = await callMem0API(`/memories/${memory_id}`);
       return { content: [{ type: "text" as const, text: `Memory:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -254,7 +254,7 @@ function createMcpServer(): McpServer {
       if (filters) body.filters = filters;
       if (limit) body.limit = limit;
 
-      const result = await callMem0API("/v1/memories/search/", "POST", body);
+      const result = await callMem0API("/memories/search/", "POST", body);
       return { content: [{ type: "text" as const, text: `Search results:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -267,7 +267,7 @@ function createMcpServer(): McpServer {
       inputSchema: UpdateMemorySchema,
     },
     async ({ memory_id, data }) => {
-      const result = await callMem0API(`/v1/memories/${memory_id}`, "PUT", { data });
+      const result = await callMem0API(`/memories/${memory_id}`, "PUT", { data });
       return { content: [{ type: "text" as const, text: `Memory updated:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -280,7 +280,7 @@ function createMcpServer(): McpServer {
       inputSchema: GetMemoryHistorySchema,
     },
     async ({ memory_id }) => {
-      const result = await callMem0API(`/v1/memories/${memory_id}/history`);
+      const result = await callMem0API(`/memories/${memory_id}/history`);
       return { content: [{ type: "text" as const, text: `Memory history:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -293,7 +293,7 @@ function createMcpServer(): McpServer {
       inputSchema: DeleteMemorySchema,
     },
     async ({ memory_id }) => {
-      const result = await callMem0API(`/v1/memories/${memory_id}`, "DELETE");
+      const result = await callMem0API(`/memories/${memory_id}`, "DELETE");
       return { content: [{ type: "text" as const, text: `Memory deleted:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -311,7 +311,7 @@ function createMcpServer(): McpServer {
       else if (run_id) params.run_id = run_id;
       else params.user_id = user_id ?? DEFAULT_USER_ID;
 
-      const result = await callMem0API("/v1/memories", "DELETE", undefined, params);
+      const result = await callMem0API("/memories", "DELETE", undefined, params);
       return { content: [{ type: "text" as const, text: `All memories deleted:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -321,7 +321,7 @@ function createMcpServer(): McpServer {
     "reset_memories",
     { description: "Reset (wipe) all memories in the store" },
     async () => {
-      const result = await callMem0API("/v1/reset", "POST");
+      const result = await callMem0API("/reset", "POST");
       return { content: [{ type: "text" as const, text: `Memories reset:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -331,7 +331,7 @@ function createMcpServer(): McpServer {
     "get_health",
     { description: "Check the health and current LLM configuration of the Mem0 service" },
     async () => {
-      const result = await callMem0API("/v1/health");
+      const result = await callMem0API("/health");
       return { content: [{ type: "text" as const, text: `Service health:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -341,7 +341,7 @@ function createMcpServer(): McpServer {
     "get_config",
     { description: "Get the current Mem0 service configuration (LLM provider, embedder, stores)" },
     async () => {
-      const result = await callMem0API("/v1/config");
+      const result = await callMem0API("/config");
       return { content: [{ type: "text" as const, text: `Current config:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -356,7 +356,7 @@ function createMcpServer(): McpServer {
     async ({ provider, model }) => {
       const body: Record<string, unknown> = { provider };
       if (model) body.model = model;
-      const result = await callMem0API("/v1/config/switch", "POST", body);
+      const result = await callMem0API("/config/switch", "POST", body);
       return { content: [{ type: "text" as const, text: `Provider switched:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -369,7 +369,7 @@ function createMcpServer(): McpServer {
       inputSchema: ConfigureSchema,
     },
     async ({ config }) => {
-      const result = await callMem0API("/v1/configure", "POST", config);
+      const result = await callMem0API("/configure", "POST", config);
       return { content: [{ type: "text" as const, text: `Configuration applied:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
