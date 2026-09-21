@@ -279,8 +279,8 @@ function createMcpServer(): McpServer {
       description: "Update the text content of an existing memory",
       inputSchema: UpdateMemorySchema,
     },
-    async ({ memory_id, data }) => {
-      const result = await callMem0API(`/memories/${memory_id}`, "PUT", { data });
+    async ({ memory_id, text }) => {
+      const result = await callMem0API(`/memories/${memory_id}`, "PUT", { text });
       return { content: [{ type: "text" as const, text: `Memory updated:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
