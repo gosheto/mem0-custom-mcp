@@ -16,6 +16,7 @@ if (!Number.isInteger(_rawPort) || _rawPort < 1 || _rawPort > 65535) {
   process.stderr.write(JSON.stringify({ ts: new Date().toISOString(), level: "ERROR", message: `Invalid MCP_PORT value: "${process.env.MCP_PORT}". Must be an integer between 1 and 65535.` }) + "\n");
   process.exit(1);
 }
+
 const MCP_PORT = _rawPort;
 
 // Bearer token sent as "Authorization: Bearer <token>" on every mem0 HTTP request.
@@ -165,7 +166,6 @@ async function callMem0API(
       );
     }
 
-
     // Some endpoints return empty bodies (204 No Content style)
     const text = await response.text();
     const result = text ? JSON.parse(text) : { message: "OK" };
@@ -207,7 +207,7 @@ function createMcpServer(): McpServer {
       else body.user_id = user_id ?? DEFAULT_USER_ID;
       if (metadata) body.metadata = metadata;
 
-      const result = await callMem0API("/memories/", "POST", body);
+      const result = await callMem0API("/memories", "POST", body);
       return { content: [{ type: "text" as const, text: `Memory added:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -264,10 +264,10 @@ function createMcpServer(): McpServer {
       if (limit) body.limit = limit;
 
       const result = await callMem0API(
-                    "/search",
-                    "POST",
-                    body
-                  );
+        "/search",
+        "POST",
+        body
+      );
       return { content: [{ type: "text" as const, text: `Search results:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
@@ -312,6 +312,7 @@ function createMcpServer(): McpServer {
   );
 
   // ── delete_all_memories ─────────────────────────────────────────────────────
+  /*
   server.registerTool(
     "delete_all_memories",
     {
@@ -328,8 +329,10 @@ function createMcpServer(): McpServer {
       return { content: [{ type: "text" as const, text: `All memories deleted:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
+  */
 
   // ── reset_memories ──────────────────────────────────────────────────────────
+  /*
   server.registerTool(
     "reset_memories",
     { description: "Reset (wipe) all memories in the store" },
@@ -338,8 +341,10 @@ function createMcpServer(): McpServer {
       return { content: [{ type: "text" as const, text: `Memories reset:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
+  */
 
   // ── get_health ──────────────────────────────────────────────────────────────
+  /*
   server.registerTool(
     "get_health",
     { description: "Check the health and current LLM configuration of the Mem0 service" },
@@ -348,8 +353,10 @@ function createMcpServer(): McpServer {
       return { content: [{ type: "text" as const, text: `Service health:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
+  */
 
   // ── get_config ──────────────────────────────────────────────────────────────
+  /*
   server.registerTool(
     "get_config",
     { description: "Get the current Mem0 service configuration (LLM provider, embedder, stores)" },
@@ -358,8 +365,10 @@ function createMcpServer(): McpServer {
       return { content: [{ type: "text" as const, text: `Current config:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
+  */
 
   // ── switch_provider ─────────────────────────────────────────────────────────
+  /*
   server.registerTool(
     "switch_provider",
     {
@@ -373,8 +382,10 @@ function createMcpServer(): McpServer {
       return { content: [{ type: "text" as const, text: `Provider switched:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
+  */
 
   // ── configure ───────────────────────────────────────────────────────────────
+  /*
   server.registerTool(
     "configure",
     {
@@ -386,6 +397,7 @@ function createMcpServer(): McpServer {
       return { content: [{ type: "text" as const, text: `Configuration applied:\n${JSON.stringify(result, null, 2)}` }] };
     }
   );
+  */
 
   return server;
 }
